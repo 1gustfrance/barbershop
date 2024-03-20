@@ -1,7 +1,7 @@
 const Footer = () => {
     return ( 
         <div className="w-full bg-secondary py-6 px-5">
-            <p className="text-grey-400 text-xs font-bold opacity-75">2024 Copyright FWS Barber Gustavo</p>
+            <p className="text-grey-400 text-xs font-bold opacity-75">@2024 Copyright FWS Barber Gustavo</p>
         </div>
      );
 }
