@@ -19,7 +19,7 @@ const BarbershopInfo = ({barbershop}: BarbershopInfoProps) => {
     
     //para quando clicar no botao voltar
     const handleBackClick = () => {
-        router.back();
+        router.replace("/");
     };
     
     return (
