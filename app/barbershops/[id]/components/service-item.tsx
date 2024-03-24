@@ -3,16 +3,22 @@
 import { Button } from "@/app/_components/ui/button";
 import { Calendar } from "@/app/_components/ui/calendar";
 import { Card, CardContent } from "@/app/_components/ui/card";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/app/_components/ui/sheet";
-import { Barbershop, Service } from "@prisma/client";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/app/_components/ui/sheet";
+import { Barbershop, Booking, Service } from "@prisma/client";
 import { ptBR } from "date-fns/locale";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { generateDayTimeList } from "../_helpers/hours";
-import { format } from "date-fns";
-
-
+import { addDays, format, setHours, setMinutes } from "date-fns";
+import { saveBooking } from "../_actions/save-booking";
 
 
 interface ServiceItemProps {
@@ -23,6 +29,8 @@ interface ServiceItemProps {
 
 
 const ServiceItemProps = ({ service, barbershop, isAuthenticated }: ServiceItemProps) => {
+  const {data} = useSession();
+
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>(); 
 
@@ -39,8 +47,29 @@ const ServiceItemProps = ({ service, barbershop, isAuthenticated }: ServiceItemP
     if (!isAuthenticated) {
       return signIn("google")
     }
+  };
 
-    //TODO: 
+  const handleBookingSubmit = async () => {
+
+    try {
+      if (!hour || !date || !data?.user) {
+        return;
+      }
+
+      const dateHour = Number(hour.split(":")[0]);
+      const dateMinutes = Number(hour.split(":")[1]);
+
+      const newDate = setMinutes(setHours(date, dateHour), dateMinutes);
+
+      await saveBooking({
+        serviceId: service.id,
+        barbershopId: barbershop.id,
+        date: newDate,
+        userId: (data.user as any).id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 
@@ -178,7 +207,8 @@ const ServiceItemProps = ({ service, barbershop, isAuthenticated }: ServiceItemP
                   </div>
                   
                   <SheetFooter className="px-5">
-                    <Button disabled={!hour || !date}>Confirmar Reserva</Button>
+                    <Button onClick={handleBookingSubmit} disabled={!hour || !date}>
+                      Confirmar Reserva</Button>
                   </SheetFooter>
                 </SheetContent>
               </Sheet>
