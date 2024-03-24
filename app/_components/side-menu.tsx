@@ -24,8 +24,8 @@ const SideMenu = () => {
         </SheetHeader>
 
         {data?.user ? (
-          <div className="flex justify-between">
-            <div className="flex items-center gap-3 px-5 py-6">
+          <div className="flex justify-between px-5 py-6 items-center">
+            <div className="flex items-center gap-3">
               <Avatar>
                 <AvatarImage src={data.user?.image ?? ""} />
               </Avatar>
@@ -65,7 +65,7 @@ const SideMenu = () => {
           {data?.user && (
             <Button variant="outline" className="justify-start" asChild>
               <Link href="/bookings">
-                <CalendarIcon size={18} className="mt-2" />
+                <CalendarIcon size={18} className="mr-2" />
                 Agendamentos
               </Link>
             </Button>
