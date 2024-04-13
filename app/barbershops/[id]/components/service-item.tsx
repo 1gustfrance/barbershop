@@ -22,6 +22,8 @@ import { saveBooking } from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getDayBookings } from "../_actions/get-day-booking";
+
 
 
 
@@ -40,15 +42,32 @@ const ServiceItemProps = ({ service, barbershop, isAuthenticated }: ServiceItemP
   const [hour, setHour] = useState<string | undefined>();
   const [submitIsLoading, setSubmitIsLoading] = useState(false); 
   const [sheetIsOpen, setSheetIsOpen] = useState(false);
+  const [dayBookings, setDayBookings] = useState<Booking[]>([]);
+
+  useEffect(() => {
+    if (!date) {
+      return
+    }
+
+
+    const refreshAvailableHours = async () => {
+      const _dayBookings = await getDayBookings(barbershop.id, date)
+
+      setDayBookings(_dayBookings);
+    };
+
+
+    refreshAvailableHours();
+  }, [date, barbershop.id]);
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
     setHour(undefined)
-  }
+  };
 
   const handleHourClick = (time: string) => {
     setHour(time);
-  }
+  };
 
   const handleBookingClick = () => {
     if (!isAuthenticated) {
@@ -97,8 +116,31 @@ const ServiceItemProps = ({ service, barbershop, isAuthenticated }: ServiceItemP
 
 
   const timeList = useMemo(() => {
-    return date ? generateDayTimeList(date) : []
-  }, [date])
+    if (!date) {
+      return [];
+    }
+  
+    return generateDayTimeList(date).filter((time) => {
+      // time: "09:00"
+      //se houve alguma reserva em "daybooking" com a hora e minutos igual ao time, nao incluir
+
+      const timeHour = Number(time.split(":")[0]);
+      const timeMinutes = Number(time.split(":")[1]);
+
+      const booking = dayBookings.find((booking) => {
+        const bookingHour = booking.date.getHours();
+        const bookingMinutes = booking.date.getMinutes();
+
+        return bookingHour === timeHour && bookingMinutes === timeMinutes;
+      });
+
+      if (!booking) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [date, dayBookings]);
 
 
 
