@@ -13,9 +13,8 @@ export default async function Home() {
 
   const session = await getServerSession(authOptions)
 
-  const [barbershops, recommendedBarbershops, confirmedBookings] =
+  const [barbershops, confirmedBookings] =
     await Promise.all([
-      db.barbershop.findMany({}),
       db.barbershop.findMany({
         orderBy: {
           id: "asc",
@@ -42,7 +41,7 @@ export default async function Home() {
       <Header />
 
       <div className="px-5 pt-5">
-        <h2 className="text-xl font-bold"> Olá Gustavo!</h2>
+        <h2 className="text-xl font-bold">Seja bem vindo!</h2>
         <p className="capitalize">
           {format(new Date(), "EEEE',' dd 'de' MMMM", {
             locale: ptBR,

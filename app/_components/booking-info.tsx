@@ -6,7 +6,7 @@ import { Card, CardContent } from "./ui/card";
 interface BookingInfoProps {
   booking: Partial<Pick<Booking, "date">> & {
     service: Pick<Service, "name" | "price">;
-    barbershop: Pick<Barbershop, "name">;
+    barbershop: Pick<Barbershop, "name"> | null;
   };
 }
 
@@ -45,7 +45,7 @@ const BookingInfo = ({ booking }: BookingInfoProps) => {
 
         <div className="flex justify-between">
           <h3 className="text-gray-400 text-sm">Barbearia</h3>
-          <h4 className="text-sm">{booking.barbershop.name}</h4>
+          <h4 className="text-sm">{booking.barbershop?.name}</h4>
         </div>
       </CardContent>
     </Card>
