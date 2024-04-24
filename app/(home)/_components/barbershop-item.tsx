@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface BarbershopItemProps {
-    barbershop: Barbershop;
+  barbershop: Barbershop;
 }
 
 const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
@@ -21,7 +21,7 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
     router.push(`/barbershops/${barbershop.id}`);
   };
   return (
-    <Card className="min-w-full max-w-full rounded-2xl h-[279px] ">
+    <Card className="min-w-full max-w-full rounded-2xl">
       <CardContent className="px-1 py-0 pt-1">
         <div className="w-full h-[159px] relative">
           <div className="absolute top-2 left-2 z-50">
@@ -63,5 +63,5 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
     </Card>
   );
 };
- 
+
 export default BarbershopItem;
