@@ -21,7 +21,7 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
     router.push(`/barbershops/${barbershop.id}`);
   };
   return (
-    <Card className="min-w-full max-w-full rounded-2xl h-[279px] ">
+    <Card className="min-w-full max-w-full rounded-2xl w-[165px] h-[279px] ">
       <CardContent className="px-1 py-0 pt-1">
         <div className="w-full h-[159px] relative">
           <div className="absolute top-2 left-2 z-50">
@@ -44,7 +44,7 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
           />
         </div>
 
-        <div className="px-2 pb-3">
+        <div className="px-2 pb-3 overflow-hidden text-ellipsis text-nowrap">
           <h2 className="font-bold mt-2 overflow-hidden text-ellipsis text-nowrap">
             {barbershop.name}
           </h2>
